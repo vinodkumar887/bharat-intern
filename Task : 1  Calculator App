@@ -1,0 +1,59 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class CalculatorApp {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Calculator");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(100, 200);
+
+        JPanel panel = new JPanel();
+        frame.add(panel);
+
+        panel.setLayout(new GridLayout(4, 4));
+
+        JTextField inputField = new JTextField(16);
+        panel.add(inputField);
+
+        String[] buttonLabels = {
+                "7", "8", "9", "+",
+                "4", "5", "6", "-",
+                "1", "2", "3", "*",
+                "C", "0", "=", "/"
+        };
+
+        for (String label : buttonLabels) {
+            JButton button = new JButton(label);
+            panel.add(button);
+
+            button.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    String command = e.getActionCommand();
+                    if (command.equals("=")) {
+                        try {
+                            String expression = inputField.getText();
+                            double result = evaluateExpression(expression);
+                            inputField.setText(Double.toString(result));
+                        } catch (Exception ex) {
+                            inputField.setText("Error");
+                        }
+                    } else if (command.equals("C")) {
+                        inputField.setText("");
+                    } else {
+                        inputField.setText(inputField.getText() + command);
+                    }
+                }
+            });
+        }
+
+        frame.setVisible(true);
+    }
+
+    public static double evaluateExpression(String expression) {
+        // You need to implement a method to evaluate the expression here.
+        // You can use libraries like javax.script.ScriptEngine for this purpose.
+        return 0.0; // Placeholder value
+    }
+}

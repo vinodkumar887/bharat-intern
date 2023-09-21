@@ -1,0 +1,80 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class QuizApp {
+    private static int currentQuestion = 0;
+    private static int score = 0;
+
+    private static String[] questions = {
+            "What is the capital of France?",
+            "Which planet is known as the Red Planet?",
+            "What is the largest mammal in the world?"
+    };
+
+    private static String[] choices = {
+            "Paris", "Berlin", "London",
+            "Mars", "Venus", "Jupiter",
+            "Blue whale", "Elephant", "Giraffe"
+    };
+
+    private static int[] correctAnswers = { 0, 0, 0 };
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Quiz App");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 200);
+
+        JPanel panel = new JPanel();
+        frame.add(panel);
+
+        panel.setLayout(new BorderLayout());
+
+        JLabel questionLabel = new JLabel(questions[currentQuestion]);
+        panel.add(questionLabel, BorderLayout.NORTH);
+
+        JPanel choicesPanel = new JPanel();
+        choicesPanel.setLayout(new GridLayout(3, 3));
+
+        ButtonGroup buttonGroup = new ButtonGroup();
+        JRadioButton[] radioButtons = new JRadioButton[choices.length];
+
+        for (int i = 0; i < choices.length; i++) {
+            radioButtons[i] = new JRadioButton(choices[i]);
+            choicesPanel.add(radioButtons[i]);
+            buttonGroup.add(radioButtons[i]);
+        }
+
+        panel.add(choicesPanel, BorderLayout.CENTER);
+
+        JButton submitButton = new JButton("Submit");
+        panel.add(submitButton, BorderLayout.SOUTH);
+
+        submitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                for (int i = 0; i < radioButtons.length; i++) {
+                    if (radioButtons[i].isSelected()) {
+                        if (i == correctAnswers[currentQuestion]) {
+                            score++;
+                        }
+                        break;
+                    }
+                }
+
+                currentQuestion++;
+
+                if (currentQuestion < questions.length) {
+                    questionLabel.setText(questions[currentQuestion]);
+                    buttonGroup.clearSelection();
+                } else {
+                    JOptionPane.showMessageDialog(frame,
+                            "Quiz completed!\nYour score: " + score + " out of " + questions.length);
+                    frame.dispose();
+                }
+            }
+        });
+
+        frame.setVisible(true);
+    }
+}
